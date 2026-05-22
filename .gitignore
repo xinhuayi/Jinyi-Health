@@ -3,6 +3,9 @@ node_modules
 out
 dist
 coverage
+data/*.sqlite
+data/*.sqlite-*
+storage/uploads
 
 .env
 .env.local

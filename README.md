@@ -5,12 +5,13 @@
 当前版本已经搭建：
 
 - Next.js + TypeScript 前端工程
+- SQLite 本地数据库与 Next.js API 后端
 - 首页品牌展示
 - 产品中心与商品详情页
 - 科普中心
 - 确认订单与微信支付流程占位页
-- 运营后台信息架构页
-- 合规资料、检测报告、批次管理等后续扩展入口
+- 运营后台 API 清单页
+- 商品、登录、地址、购物车、订单、微信支付占位、资料上传接口
 
 > 注意：“医妆”不是国内正式监管分类。页面示例文案以功效护肤、护理场景、科普和资料展示为定位，不构成医疗建议或功效承诺。正式上线前应根据商品真实法律属性补齐化妆品备案、检测报告、生产资质、用户协议、隐私政策和售后政策。
 
@@ -19,6 +20,8 @@
 - Next.js
 - React
 - TypeScript
+- SQLite / better-sqlite3
+- Zod
 - ESLint
 - CSS Modules/global CSS style approach
 
@@ -44,6 +47,14 @@ npm run start    # 启动生产服务
 npm run lint     # 代码检查
 ```
 
+第一次访问任意 API 时会自动创建本地数据库：
+
+```text
+data/jinyi-commerce.sqlite
+```
+
+这个文件不会提交到 Git。部署到阿里云前可以继续使用 SQLite 做 MVP，也可以迁移到 RDS MySQL。
+
 ## 页面结构
 
 ```text
@@ -53,6 +64,135 @@ npm run lint     # 代码检查
 /articles
 /checkout
 /admin
+```
+
+## 第一阶段后端 API
+
+### 健康检查
+
+```text
+GET /api/health
+```
+
+### 登录
+
+开发环境手机号验证码默认是：
+
+```text
+123456
+```
+
+默认管理员账号：
+
+```text
+手机号：18800000000
+密码：admin123456
+```
+
+接口：
+
+```text
+POST /api/auth/phone-login
+POST /api/auth/admin-login
+POST /api/auth/logout
+GET  /api/me
+```
+
+示例：
+
+```bash
+curl -i -X POST http://localhost:3000/api/auth/phone-login \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"13900000000","code":"123456","name":"测试用户"}'
+```
+
+登录成功后会写入 httpOnly Cookie。用浏览器测试会自动携带 Cookie；用 curl / Postman 测试需要保留 Cookie。
+
+### 商品
+
+```text
+GET    /api/products
+POST   /api/products              # 管理员
+GET    /api/products/[id-or-slug]
+PATCH  /api/products/[id-or-slug] # 管理员
+DELETE /api/products/[id-or-slug] # 管理员，软删除为 archived
+```
+
+### 收货地址
+
+```text
+GET    /api/addresses
+POST   /api/addresses
+PATCH  /api/addresses/[id]
+DELETE /api/addresses/[id]
+```
+
+### 购物车
+
+```text
+GET    /api/cart
+POST   /api/cart
+DELETE /api/cart
+```
+
+添加购物车示例：
+
+```bash
+curl -X POST http://localhost:3000/api/cart \
+  -H "Content-Type: application/json" \
+  -d '{"productId":1,"quantity":1}'
+```
+
+### 订单
+
+```text
+GET  /api/orders
+POST /api/orders
+GET  /api/orders/[id]
+```
+
+创建订单可以传 `items`，也可以不传，默认使用当前用户购物车：
+
+```bash
+curl -X POST http://localhost:3000/api/orders \
+  -H "Content-Type: application/json" \
+  -d '{"items":[{"productId":1,"quantity":1}]}'
+```
+
+### 微信支付占位
+
+```text
+POST /api/payments/wechat
+```
+
+当前不会真正扣款，只会创建一条 mock 支付记录，方便后续替换为微信支付 V3 下单接口。
+
+### 检测报告 / 备案资料上传
+
+```text
+GET  /api/admin/documents  # 管理员
+POST /api/admin/documents  # 管理员，multipart/form-data
+```
+
+上传字段：
+
+- `file`
+- `title`
+- `type`: `filing` / `test_report` / `certificate` / `label` / `other`
+- `productId`: 可选
+
+本地上传文件会保存到：
+
+```text
+storage/uploads
+```
+
+正式上阿里云建议替换为 OSS。
+
+### 后台统计
+
+```text
+GET /api/admin/dashboard
 ```
 
 ## 后续接入建议
@@ -73,6 +213,17 @@ npm run lint     # 代码检查
 - shipments 发货表
 - after_sales 售后表
 - articles 科普文章表
+
+当前 SQLite 版本已经实现：
+
+- users
+- products
+- addresses
+- cart_items
+- orders
+- order_items
+- payments
+- compliance_documents
 
 ### 2. 微信支付
 
@@ -144,6 +295,30 @@ DATABASE_URL=
 OSS_BUCKET=
 OSS_REGION=
 ```
+
+后端还会使用：
+
+```bash
+AUTH_SECRET=replace-with-a-long-random-secret
+DEV_LOGIN_CODE=123456
+ADMIN_INITIAL_PHONE=18800000000
+ADMIN_INITIAL_PASSWORD=change-this-password
+SQLITE_PATH=./data/jinyi-commerce.sqlite
+OSS_ACCESS_KEY_ID=
+OSS_ACCESS_KEY_SECRET=
+```
+
+> 正式上线前必须修改 `AUTH_SECRET`、`ADMIN_INITIAL_PASSWORD`，并且不要把 `.env.local` 提交到 Git。
+
+## 从 SQLite 迁移到阿里云 RDS 的建议
+
+当前后端集中在 `lib/server/db.ts` 和 `app/api/**/route.ts`。迁移时建议：
+
+1. 把 SQLite 表结构迁移为 MySQL DDL。
+2. 将 `better-sqlite3` 数据访问层替换成 Prisma / Drizzle / mysql2。
+3. 将 `storage/uploads` 文件上传替换为阿里云 OSS。
+4. 保留现有 API 路径，减少前端改动。
+5. 微信支付从 `/api/payments/wechat` 的 mock 逻辑替换为微信支付 V3 下单和回调校验。
 
 ## 医研护肤 / 医妆方向合规提醒
 

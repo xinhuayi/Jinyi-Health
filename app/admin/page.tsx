@@ -3,17 +3,21 @@ export const metadata = {
 };
 
 const dashboardCards = [
-  ["今日订单", "0", "等待接入订单表"],
-  ["待发货", "0", "支付成功后进入履约"],
-  ["商品总数", "3", "来自静态商品配置"],
-  ["资料待完善", "9", "备案、检测、批次文件"],
+  ["商品 API", "已完成", "公开查询 + 管理员增删改"],
+  ["用户与地址", "已完成", "手机号登录 + 地址 CRUD"],
+  ["购物车订单", "已完成", "购物车、创建订单、订单查询"],
+  ["支付与资料", "已完成", "微信支付占位 + 备案资料上传"],
 ];
 
 const managementModules = [
-  ["商品管理", "商品上下架、价格规格、库存批次、详情页资料"],
-  ["订单管理", "订单查询、支付状态、发货信息、退款售后"],
-  ["合规资料", "检测报告、备案文件、生产资质、宣传文案审核"],
-  ["内容管理", "科普文章、首页模块、客服 FAQ、政策条款"],
+  ["商品管理", "GET/POST /api/products，GET/PATCH/DELETE /api/products/[id]"],
+  ["用户登录", "POST /api/auth/phone-login，POST /api/auth/admin-login，GET /api/me"],
+  ["地址管理", "GET/POST /api/addresses，PATCH/DELETE /api/addresses/[id]"],
+  ["购物车", "GET/POST/DELETE /api/cart"],
+  ["订单管理", "GET/POST /api/orders，GET /api/orders/[id]"],
+  ["微信支付占位", "POST /api/payments/wechat"],
+  ["资料上传", "GET/POST /api/admin/documents"],
+  ["后台统计", "GET /api/admin/dashboard"],
 ];
 
 export default function AdminPage() {
@@ -22,7 +26,12 @@ export default function AdminPage() {
       <section className="admin-sidebar">
         <span className="pill">Admin</span>
         <h1>运营后台</h1>
-        <p>当前是界面雏形，后续接入管理员登录、数据库、文件上传和订单履约。</p>
+        <p>第一阶段后端已接入 SQLite、本地文件上传、登录 Cookie 和主要业务 API。</p>
+        <div className="admin-credential">
+          <span>默认管理员</span>
+          <strong>18800000000</strong>
+          <small>密码：admin123456</small>
+        </div>
         <nav>
           {managementModules.map(([title]) => (
             <a href={`#${title}`} key={title}>
@@ -49,7 +58,7 @@ export default function AdminPage() {
               <span>{String(index + 1).padStart(2, "0")}</span>
               <h2>{title}</h2>
               <p>{text}</p>
-              <button type="button">待接入</button>
+              <button type="button">API Ready</button>
             </article>
           ))}
         </div>
