@@ -15,7 +15,7 @@ export function SiteHeader() {
           <span className="brand-mark">JY</span>
           <span>
             <strong>瑾颐健康</strong>
-            <small>Medical Skincare</small>
+            <small>Aesthetic Skincare</small>
           </span>
         </Link>
 
@@ -44,7 +44,7 @@ export function SiteFooter() {
             <span className="brand-mark">JY</span>
             <span>
               <strong>瑾颐健康</strong>
-              <small>医研护肤自营商城</small>
+              <small>轻医美护肤自营商城</small>
             </span>
           </Link>
           <p>
@@ -75,14 +75,17 @@ export function SiteFooter() {
 export function ProductArt({ label }: { label: string }) {
   return (
     <div className="product-art" aria-label={label}>
+      <div className="silk-ribbon" />
       <div className="halo" />
       <div className="serum-bottle">
         <span className="cap" />
-        <span className="bottle-label">JINYI</span>
+        <span className="bottle-label">JY LAB</span>
       </div>
       <div className="cream-jar">
         <span />
       </div>
+      <i className="pearl pearl-one" />
+      <i className="pearl pearl-two" />
       <em>{label}</em>
     </div>
   );

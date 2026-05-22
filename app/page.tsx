@@ -28,11 +28,11 @@ export default function Home() {
     <main>
       <section className="hero site-shell">
         <div className="hero-copy">
-          <span className="pill">医研护肤自营商城</span>
-          <h1>把专业护理产品，做成用户看得懂、敢下单的网站。</h1>
+          <span className="pill">轻医美护肤自营商城</span>
+          <h1>院线质感的医研护肤商城。</h1>
           <p>
-            瑾颐健康医研护肤商城第一版，围绕产品展示、资料透明、微信支付流程和后台运营雏形重构，
-            更适合后续放到阿里云上线。
+            用瓷白、裸粉、香槟金和深咖黑建立轻医美品牌感；围绕产品展示、资料透明、
+            微信支付流程和后台运营雏形，打造更适合正式上线的商城界面。
           </p>
           <div className="action-row">
             <Link className="button primary" href="/products">
@@ -76,7 +76,7 @@ export default function Home() {
       <section className="site-shell section">
         <div className="section-title centered">
           <span className="pill">Brand System</span>
-          <h2>第一版先建立品牌信任感</h2>
+          <h2>像医美机构一样干净、克制、可信</h2>
           <p>医研护肤类商品不能只放价格，更要让用户清楚看到产品边界、资料和服务流程。</p>
         </div>
         <div className="brand-grid">
@@ -94,7 +94,7 @@ export default function Home() {
         <div className="section-title">
           <span className="pill">Products</span>
           <h2>精选医研护肤产品</h2>
-          <p>用更接近真实商城的卡片展示商品卖点、规格和价格，后续可以替换成后台接口数据。</p>
+          <p>用更接近高端护肤品牌的视觉展示商品卖点、规格和价格，后续可以替换成后台接口数据。</p>
           <Link className="text-link" href="/products">
             进入产品中心 →
           </Link>
