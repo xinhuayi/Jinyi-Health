@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ProductArt } from "@/components/site-chrome";
 import { products } from "@/lib/catalog";
 
 export const metadata = {
@@ -6,22 +6,10 @@ export const metadata = {
 };
 
 const checkoutSteps = [
-  {
-    title: "确认商品",
-    text: "展示商品、规格、数量、价格、库存和是否需要客服确认。",
-  },
-  {
-    title: "填写地址",
-    text: "支持国内收货地址、手机号、发票信息和配送备注。",
-  },
-  {
-    title: "微信支付",
-    text: "后续对接微信支付 V3，生成预支付订单并处理支付回调。",
-  },
-  {
-    title: "订单履约",
-    text: "后台确认付款、发货、物流单号和售后状态。",
-  },
+  ["确认商品", "核对规格、数量、价格和咨询提示。"],
+  ["填写地址", "预留手机号、收货地址、发票和配送备注。"],
+  ["微信支付", "后续接入微信支付 V3 创建预支付订单。"],
+  ["订单履约", "后台同步支付、发货、物流与售后状态。"],
 ];
 
 export default function CheckoutPage() {
@@ -29,49 +17,54 @@ export default function CheckoutPage() {
 
   return (
     <main className="page-shell">
-      <Link className="back-link" href="/">
-        ← 返回首页
-      </Link>
-      <section className="page-hero">
-        <p className="eyebrow">Checkout</p>
-        <h1>确认订单与微信支付流程</h1>
-        <p>
-          当前页面是可视化流程占位，方便后续接入真实购物车、地址服务、订单 API 和微信支付商户号。
-        </p>
+      <section className="page-hero compact">
+        <span className="pill">Checkout Preview</span>
+        <h1>确认订单</h1>
+        <p>这是一版前端流程预览，后续接入真实购物车、订单接口和微信支付。</p>
       </section>
 
-      <section className="checkout-layout">
-        <div className="checkout-panel">
-          <h2>订单预览</h2>
-          <div className="order-item">
+      <section className="checkout-grid">
+        <div className="checkout-card">
+          <h2>订单商品</h2>
+          <div className="checkout-product">
+            <ProductArt label={cartProduct.category} />
             <div>
               <strong>{cartProduct.name}</strong>
-              <p>{cartProduct.unit}</p>
+              <span>{cartProduct.unit}</span>
             </div>
-            <span>¥{cartProduct.price}</span>
           </div>
-          <div className="order-total">
-            <span>应付金额</span>
-            <strong>¥{cartProduct.price}</strong>
+          <div className="order-lines">
+            <p>
+              <span>商品金额</span>
+              <strong>¥{cartProduct.price}</strong>
+            </p>
+            <p>
+              <span>配送费用</span>
+              <strong>待确认</strong>
+            </p>
+            <p className="total">
+              <span>应付金额</span>
+              <strong>¥{cartProduct.price}</strong>
+            </p>
           </div>
           <button className="button primary full" type="button">
-            微信支付占位按钮
+            微信支付占位
           </button>
-          <p className="compliance-note">
-            接入时需要配置微信支付商户号、API v3 密钥、证书序列号、回调地址和订单状态同步。
-          </p>
         </div>
 
-        <div className="checkout-steps">
-          {checkoutSteps.map((step, index) => (
-            <article key={step.title}>
-              <span>{index + 1}</span>
+        <div className="checkout-flow">
+          {checkoutSteps.map(([title, text], index) => (
+            <article key={title}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
               <div>
-                <h2>{step.title}</h2>
-                <p>{step.text}</p>
+                <h2>{title}</h2>
+                <p>{text}</p>
               </div>
             </article>
           ))}
+          <div className="notice-card">
+            接入微信支付时需要商户号、AppID、API v3 密钥、证书序列号和支付回调地址。
+          </div>
         </div>
       </section>
     </main>

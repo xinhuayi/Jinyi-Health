@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ProductArt } from "@/components/site-chrome";
 import { categories, products } from "@/lib/catalog";
 
 export const metadata = {
@@ -8,14 +9,11 @@ export const metadata = {
 export default function ProductsPage() {
   return (
     <main className="page-shell">
-      <Link className="back-link" href="/">
-        ← 返回首页
-      </Link>
-      <section className="page-hero">
-        <p className="eyebrow">Product Center</p>
-        <h1>产品中心</h1>
+      <section className="page-hero product-hero">
+        <span className="pill">Product Collection</span>
+        <h1>医研护肤产品中心</h1>
         <p>
-          第一版商品数据采用静态配置，重点完成产品展示、资料说明和详情页结构，后续可接入后台商品管理。
+          以自营精选为起点，突出规格、价格、资料完整度和购买前咨询，后续接入数据库后可直接变成真实商品列表。
         </p>
       </section>
 
@@ -25,22 +23,20 @@ export default function ProductsPage() {
         ))}
       </div>
 
-      <section className="listing-grid">
+      <section className="catalog-grid">
         {products.map((product) => (
-          <article className="listing-card" key={product.slug}>
-            <div className="product-visual">
-              <span>{product.category}</span>
-            </div>
-            <div className="listing-content">
-              <p className="tag-row">{product.tags.join(" / ")}</p>
+          <article className="catalog-card" key={product.slug}>
+            <ProductArt label={product.category} />
+            <div className="catalog-content">
+              <span>{product.tags.slice(0, 2).join(" / ")}</span>
               <h2>{product.name}</h2>
               <p>{product.summary}</p>
-              <div className="price-row">
-                <span>¥{product.price}</span>
+              <div className="meta-row">
+                <strong>¥{product.price}</strong>
                 <small>{product.unit}</small>
               </div>
               <Link className="button primary" href={`/products/${product.slug}`}>
-                查看商品详情
+                查看详情
               </Link>
             </div>
           </article>

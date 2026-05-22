@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProductArt } from "@/components/site-chrome";
 import { products } from "@/lib/catalog";
 
 type ProductPageProps = {
@@ -33,19 +34,26 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
 
   return (
     <main className="page-shell">
-      <Link className="back-link" href="/products">
+      <Link className="crumb-link" href="/products">
         ← 返回产品中心
       </Link>
-      <section className="detail-grid">
-        <div className="detail-visual">
-          <span>{product.category}</span>
+
+      <section className="product-detail">
+        <div className="detail-gallery">
+          <ProductArt label={product.category} />
+          <div className="gallery-strip">
+            <span>备案资料</span>
+            <span>检测报告</span>
+            <span>批次追溯</span>
+          </div>
         </div>
+
         <div className="detail-copy">
-          <p className="eyebrow">Product Detail</p>
+          <span className="pill">{product.category}</span>
           <h1>{product.name}</h1>
-          <p className="detail-subtitle">{product.subtitle}</p>
-          <div className="price-row">
-            <span>¥{product.price}</span>
+          <p>{product.subtitle}</p>
+          <div className="meta-row detail-price">
+            <strong>¥{product.price}</strong>
             <small>{product.unit}</small>
           </div>
           <div className="tag-list">
@@ -53,22 +61,23 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
               <span key={tag}>{tag}</span>
             ))}
           </div>
-          <div className="detail-actions">
+          <div className="action-row">
             <Link className="button primary" href="/checkout">
               立即购买
             </Link>
-            <Link className="button secondary" href="/checkout">
+            <Link className="button ghost" href="/checkout">
               加入购物车
             </Link>
           </div>
-          <p className="compliance-note">
-            请在购买前确认商品属性、使用说明和相关资料。如涉及专业护理场景，请先咨询客服或专业人员。
-          </p>
+          <div className="notice-card">
+            请在购买前确认商品属性、使用说明和相关资料。页面示例不构成医疗建议或功效承诺。
+          </div>
         </div>
       </section>
 
-      <section className="detail-sections">
+      <section className="detail-panel-grid">
         <article>
+          <span>01</span>
           <h2>商品说明</h2>
           <ul>
             {product.details.map((detail) => (
@@ -77,14 +86,17 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
           </ul>
         </article>
         <article>
+          <span>02</span>
           <h2>使用方式</h2>
           <p>{product.usage}</p>
         </article>
         <article>
+          <span>03</span>
           <h2>储存与配送</h2>
           <p>{product.storage}</p>
         </article>
         <article>
+          <span>04</span>
           <h2>合规资料</h2>
           <ul>
             {product.compliance.map((item) => (
