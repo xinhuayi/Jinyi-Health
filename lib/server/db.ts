@@ -7,7 +7,6 @@ import { hashPassword } from "./crypto";
 type SqliteDb = Database.Database;
 
 declare global {
-  // eslint-disable-next-line no-var
   var __jinyiDb: SqliteDb | undefined;
 }
 
