@@ -39,11 +39,11 @@ export default function Home() {
 
         <div className="hero-grid">
           <div className="hero-copy">
-            <p className="eyebrow">单商家自营 · 面向国内用户 · 预留微信支付</p>
-            <h1>外泌体相关产品商城第一版</h1>
+            <p className="eyebrow">医妆方向 · 单商家自营 · 面向国内用户 · 预留微信支付</p>
+            <h1>医研护肤产品商城第一版</h1>
             <p className="hero-lead">
-              为瑾颐健康搭建一个可继续扩展的自营电商网站：先完成品牌展示、产品介绍、
-              购物流程、合规资料入口和运营后台雏形，后续可接入微信支付商户号与阿里云部署。
+              为瑾颐健康搭建一个可继续扩展的自营电商网站：先完成医研护肤品牌展示、
+              功效护理产品介绍、购物流程、合规资料入口和运营后台雏形，后续可接入微信支付商户号与阿里云部署。
             </p>
             <div className="hero-actions">
               <Link className="button primary" href="/products">
@@ -54,7 +54,7 @@ export default function Home() {
               </Link>
             </div>
             <p className="compliance-note">
-              提示：页面示例文案定位为护理与科普展示，不构成医疗建议或功效承诺。
+              提示：“医妆”不是国内正式监管分类，正式上线文案建议以功效护肤、护理场景和资料展示为主，不构成医疗建议或功效承诺。
             </p>
           </div>
 

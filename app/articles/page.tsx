@@ -15,7 +15,7 @@ export default function ArticlesPage() {
         <p className="eyebrow">Knowledge Center</p>
         <h1>科普中心</h1>
         <p>
-          外泌体相关产品需要更多解释和资料支持，科普内容可以承接搜索流量，也能降低购买前疑虑。
+          医研护肤类产品需要更多解释和资料支持，科普内容可以承接搜索流量，也能降低购买前疑虑。
         </p>
       </section>
 
